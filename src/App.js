@@ -2,22 +2,31 @@ import React from 'react'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
 
-/*const Menu = () => (
-  <div>    
-    <a href='#'>anecdotes</a>&nbsp;
-    <a href='#'>create new</a>&nbsp;
-    <a href='#'>about</a>&nbsp;
-  </div>
-)*/
-
 const AnecdoteList = ({ anecdotes }) => (
+  
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => 
+        <li key={anecdote.id}>
+        <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+        </li>
+      )}
     </ul>  
   </div>
 )
+
+const Anecdote = ( { anecdote }) => (
+  <div>
+    <h2>{anecdote.content}</h2>
+    <br/>
+    has {anecdote.votes} votes<br/><br/>
+    for more info see <a target="_new" href={anecdote.info}>{anecdote.info}</a>
+    <br/><br/><br/>
+  </div>
+)
+
+
 
 const About = () => (
   <div>
@@ -121,8 +130,10 @@ class App extends React.Component {
     this.setState({ anecdotes: this.state.anecdotes.concat(anecdote) })
   }
 
-  anecdoteById = (id) =>
-    this.state.anecdotes.find(a => a.id === id)
+  anecdoteById = (id) => {
+    let res = this.state.anecdotes.find(a => a.id === id)
+    return res   //returning as array otherwise AL croaks.
+  }
 
   vote = (id) => {
     const anecdote = this.anecdoteById(id)
@@ -142,16 +153,24 @@ class App extends React.Component {
       <div>
         <Router>
         <div>
+        <h1>Software anecdotes</h1>
+
           <div>
               <Link to="/">anecdotes</Link> &nbsp;
               <Link to="/create">create new</Link> &nbsp;
               <Link to="/about">about</Link>
           </div>
+
         <Route exact path="/" render={()=><AnecdoteList anecdotes={this.state.anecdotes} />} />
+        <Route exact path="/anecdotes" render={()=><AnecdoteList anecdotes={this.state.anecdotes} />} />
+        
         <Route path="/create" render={()=><CreateNew addNew={this.addNew}/>} />
         <Route exact path="/about" render={()=><About />}/>
         
-        <h1>Software anecdotes</h1>
+        <Route exact path="/anecdotes/:id" render={({match})=>
+          <Anecdote anecdote={this.anecdoteById(match.params.id)} />}
+        />
+
           <Footer />
         </div>
         </Router>
