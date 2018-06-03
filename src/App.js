@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Route, NavLink, Redirect } from 'react-router-dom'
 
 
 const AnecdoteList = ({ anecdotes }) => (
@@ -9,7 +9,7 @@ const AnecdoteList = ({ anecdotes }) => (
     <ul>
       {anecdotes.map(anecdote => 
         <li key={anecdote.id}>
-        <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+        <NavLink to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</NavLink>
         </li>
       )}
     </ul>  
@@ -115,6 +115,17 @@ const notificationStyle = {
   padding: 10
 }
 
+const activeLinkStyle={
+  fontWeight: 'bold',
+  color: 'blue', 
+  backgroundColor: 'lightgray',
+ }
+
+ const baseLinkStyle={
+  color: 'teal',
+  fontSize: 14
+ }
+
 
 class App extends React.Component {
   constructor() {
@@ -180,9 +191,9 @@ class App extends React.Component {
         {/*console.log('Tila paassa: ', this.state)*/}
 
           <div>
-              <Link to="/">anecdotes</Link> &nbsp;
-              <Link to="/create">create new</Link> &nbsp;
-              <Link to="/about">about</Link>
+              <NavLink exact style={baseLinkStyle} activeStyle={activeLinkStyle} to="/">anecdotes</NavLink> &nbsp;
+              <NavLink style={baseLinkStyle} activeStyle={activeLinkStyle} to="/create">create new</NavLink> &nbsp;
+              <NavLink style={baseLinkStyle} activeStyle={activeLinkStyle} to="/about">about</NavLink>
           </div>
 
         {(this.state.notification &&
@@ -195,7 +206,7 @@ class App extends React.Component {
         <Route exact path="/" render={()=><AnecdoteList anecdotes={this.state.anecdotes} />} />
         <Route exact path="/anecdotes" render={()=><AnecdoteList anecdotes={this.state.anecdotes} />} />
         
-        <Route path="/create" render={()=><CreateNew addNew={this.addNew}/>} />
+        <Route exact path="/create" render={()=><CreateNew addNew={this.addNew}/>} />
         <Route exact path="/about" render={()=><About />}/>
         
         <Route exact path="/anecdotes/:id" render={({match})=>
