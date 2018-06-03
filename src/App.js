@@ -106,6 +106,16 @@ class CreateNew extends React.Component {
   }
 }
 
+const notificationStyle = {
+  color: 'green',
+  fontStyle : 'italic',
+  fontSize: 14,
+  borderStyle: 'dotted',
+  borderRadius: 5,
+  padding: 10
+}
+
+
 class App extends React.Component {
   constructor() {
     super()
@@ -176,9 +186,9 @@ class App extends React.Component {
           </div>
 
         {(this.state.notification &&
-          <div>
+          <p style={notificationStyle}>
             {this.state.notification}
-          </div>  
+          </p>  
         )}
 
 
