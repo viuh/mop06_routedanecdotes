@@ -1,12 +1,14 @@
 import React from 'react'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
-const Menu = () => (
+
+/*const Menu = () => (
   <div>    
     <a href='#'>anecdotes</a>&nbsp;
     <a href='#'>create new</a>&nbsp;
     <a href='#'>about</a>&nbsp;
   </div>
-)
+)*/
 
 const AnecdoteList = ({ anecdotes }) => (
   <div>
@@ -83,7 +85,7 @@ class CreateNew extends React.Component {
           </div> 
           <button>create</button>
         </form>
-      </div>  
+        </div>
     )
 
   }
@@ -138,15 +140,33 @@ class App extends React.Component {
   render() {
     return (
       <div>
+        <Router>
+        <div>
+          <div>
+              <Link to="/">anecdotes</Link> &nbsp;
+              <Link to="/create">create new</Link> &nbsp;
+              <Link to="/about">about</Link>
+          </div>
+        <Route exact path="/" render={()=><AnecdoteList anecdotes={this.state.anecdotes} />} />
+        <Route path="/create" render={()=><CreateNew addNew={this.addNew}/>} />
+        <Route exact path="/about" render={()=><About />}/>
+        
         <h1>Software anecdotes</h1>
-          <Menu />
-          <AnecdoteList anecdotes={this.state.anecdotes} />
-          <About />      
-          <CreateNew addNew={this.addNew}/>
-        <Footer />
-      </div>
+          <Footer />
+        </div>
+        </Router>
+      </div>  
     );
   }
 }
 
 export default App;
+
+
+/*
+          <Menu />
+          <AnecdoteList anecdotes={this.state.anecdotes} />
+          <About />      
+          <CreateNew addNew={this.addNew}/>
+        }
+*/
