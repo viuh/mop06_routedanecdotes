@@ -1,8 +1,23 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, NavLink, Redirect } from 'react-router-dom'
+import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
 
 const AnecdoteList = ({ anecdotes }) => (
+  
+  <div>
+    <h2>Anecdotes</h2>
+    <ListGroup>
+      {anecdotes.map(anecdote => 
+        <ListGroupItem key={anecdote.id} 
+          href={`/anecdotes/${anecdote.id}`}>{anecdote.content}</ListGroupItem>
+      )}
+    </ListGroup>  
+  </div>
+)
+
+
+/*const AnecdoteList = ({ anecdotes }) => (
   
   <div>
     <h2>Anecdotes</h2>
@@ -14,7 +29,7 @@ const AnecdoteList = ({ anecdotes }) => (
       )}
     </ul>  
   </div>
-)
+)*/
 
 const Anecdote = ( { anecdote }) => (
   <div>
@@ -184,6 +199,7 @@ class App extends React.Component {
 
   render() {
     return (
+      <div className="container">
       <div>
         <Router>
         <div>
@@ -217,6 +233,7 @@ class App extends React.Component {
         </div>
         </Router>
       </div>  
+      </div>
     );
   }
 }
