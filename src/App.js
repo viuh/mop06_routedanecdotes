@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 
 
 const AnecdoteList = ({ anecdotes }) => (
@@ -56,7 +56,8 @@ class CreateNew extends React.Component {
     this.state = {
       content: '',
       author: '',
-      info: ''
+      info: '',
+      creationClicked:false,
     }
   }
 
@@ -72,6 +73,10 @@ class CreateNew extends React.Component {
       author: this.state.author,
       info: this.state.info,
       votes: 0
+    })
+
+    this.setState({
+      creationClicked: true
     })
   }
 
@@ -94,6 +99,7 @@ class CreateNew extends React.Component {
           </div> 
           <button>create</button>
         </form>
+        {this.state.creationClicked ? <Redirect to="/" />: <div/> }
         </div>
     )
 
@@ -127,7 +133,14 @@ class App extends React.Component {
 
   addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
-    this.setState({ anecdotes: this.state.anecdotes.concat(anecdote) })
+    let msg = "a new anecdote: " + anecdote.content + " created!"
+    this.setState({ anecdotes: this.state.anecdotes.concat(anecdote) ,
+      notification: msg
+    })
+    setTimeout(() => {
+      this.setState({notification: null})
+    }, 10000)
+    
   }
 
   anecdoteById = (id) => {
@@ -154,12 +167,20 @@ class App extends React.Component {
         <Router>
         <div>
         <h1>Software anecdotes</h1>
+        {/*console.log('Tila paassa: ', this.state)*/}
 
           <div>
               <Link to="/">anecdotes</Link> &nbsp;
               <Link to="/create">create new</Link> &nbsp;
               <Link to="/about">about</Link>
           </div>
+
+        {(this.state.notification &&
+          <div>
+            {this.state.notification}
+          </div>  
+        )}
+
 
         <Route exact path="/" render={()=><AnecdoteList anecdotes={this.state.anecdotes} />} />
         <Route exact path="/anecdotes" render={()=><AnecdoteList anecdotes={this.state.anecdotes} />} />
@@ -182,10 +203,3 @@ class App extends React.Component {
 export default App;
 
 
-/*
-          <Menu />
-          <AnecdoteList anecdotes={this.state.anecdotes} />
-          <About />      
-          <CreateNew addNew={this.addNew}/>
-        }
-*/
