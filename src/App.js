@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, NavLink, Redirect } from 'react-router-dom'
 import { ListGroup, ListGroupItem, Media } from 'react-bootstrap'
-
+import anecdoteService from './services/anecdotes'
 
 const AnecdoteList = ({ anecdotes }) => (
 
@@ -175,6 +175,8 @@ class App extends React.Component {
   addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     let msg = 'a new anecdote: ' + anecdote.content + ' created!'
+    anecdoteService.createNew(anecdote)
+
     this.setState({ anecdotes: this.state.anecdotes.concat(anecdote) ,
       notification: msg
     })
