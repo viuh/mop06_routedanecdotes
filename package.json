@@ -3,17 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "eslint": "^4.19.1",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "^1.1.4",
+    "redux": "^4.0.0",
+    "redux-devtools": "^3.4.1",
     "semantic-ui-react": "^0.80.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint" : "node_modules/.bin/eslint ."
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.3"
   }
 }
