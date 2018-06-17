@@ -33,6 +33,8 @@ const AnecdoteList = ({ anecdotes }) => (
 
 const Anecdote = ( { anecdote }) => (
   <div>
+    {console.log('DDUI', anecdote)}
+
     <h2>{anecdote.content}</h2>
     <br/>
     has {anecdote.votes} votes<br/><br/>
@@ -176,8 +178,8 @@ class App extends React.Component {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     let msg = 'a new anecdote: ' + anecdote.content + ' created!'
     anecdoteService.createNew(anecdote)
-
-    this.setState({ anecdotes: this.state.anecdotes.concat(anecdote) ,
+    const anecdotes2= this.state.anecdotes.concat(anecdote)
+    this.setState({ anecdotes: anecdotes2 ,
       notification: msg
     })
     setTimeout(() => {
@@ -188,6 +190,9 @@ class App extends React.Component {
 
   anecdoteById = (id) => {
     let res = this.state.anecdotes.find(a => a.id === id)
+
+    //let res = anecdoteService.get(id)
+    //  .then(res => { return res } )
     return res   //returning as array otherwise AL croaks.
   }
 
