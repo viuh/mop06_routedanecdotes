@@ -1,3 +1,4 @@
+import anecdoteService from '../services/anecdotes'
 
 const initialState = [
   {
@@ -17,12 +18,27 @@ const initialState = [
 ]
 
 
-
 const anecdoteReducer = (state = initialState, action) => {
+  const inits = anecdoteService.getAll()
+  console.log('aR-inits_opt2:', inits)
+
+  console.log('aR:', state , 'data:', action.data, 'type:', action.type)
+  let id = null
+  let res = null
+
   switch(action.type) {
   case 'NEW_ANE':
+    console.log('aR, adding new one:', action.data)
     //return state.concat(action.data)
+    console.log('aR-Uusi tila:', [...state, action.data])
     return [...state, action.data]
+  case 'GET':  // TODO: turha?
+    id = action.data
+    console.log('aR-id:',id,'--kokotila:',state)
+    res = state[0]
+    console.log('aR-res', res)
+    return res
+    //return state.map(an => an.id !== id ? an : res)
   case 'INIT':
     return state
   default:
@@ -30,21 +46,7 @@ const anecdoteReducer = (state = initialState, action) => {
   }
 }
 
-const generateId = () => Number((Math.random() * 1000000).toFixed(0))
 
-export const anecdoteCreation = (content) => {
-  content.id = generateId()
-
-  console.log('Incoming', content)
-  return {
-    type: 'NEW_ANE',
-    data: content
-    /*    data: {
-      content,
-      id: generateId()
-    }*/
-  }
-}
 
 
 export default anecdoteReducer

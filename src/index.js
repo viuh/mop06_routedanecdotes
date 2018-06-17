@@ -14,17 +14,17 @@ const reducer = combineReducers({
 
 const store = createStore(reducer)
 
-console.log(store.getState())
+//console.log('indx:', store.getState())
 
-const render = () => {
-  ReactDOM.render(
-    <Provider store={createStore(anecdoteReducer)}>
-      <App />
-    </Provider>,
-    document.getElementById('root')
-  )
-}
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
 
-render()
-store.subscribe(render)
+
+//const render = () => {
+//render()
+//store.subscribe(render)
 

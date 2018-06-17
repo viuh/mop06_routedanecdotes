@@ -1,49 +1,12 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, NavLink, Redirect } from 'react-router-dom'
-import { ListGroup, ListGroupItem, Media } from 'react-bootstrap'
+import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom'
+import { Media } from 'react-bootstrap'
 import anecdoteService from './services/anecdotes'
-
-const AnecdoteList = ({ anecdotes }) => (
-
-  <div>
-    <h2>Anecdotes</h2>
-    <ListGroup>
-      {anecdotes.map(anecdote =>
-        <ListGroupItem key={anecdote.id}
-          href={`/anecdotes/${anecdote.id}`}>{anecdote.content}</ListGroupItem>
-      )}
-    </ListGroup>
-  </div>
-)
-
-
-/*const AnecdoteList = ({ anecdotes }) => (
-
-  <div>
-    <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote =>
-        <li key={anecdote.id}>
-        <NavLink to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</NavLink>
-        </li>
-      )}
-    </ul>
-  </div>
-)*/
-
-const Anecdote = ( { anecdote }) => (
-  <div>
-    {console.log('DDUI', anecdote)}
-
-    <h2>{anecdote.content}</h2>
-    <br/>
-    has {anecdote.votes} votes<br/><br/>
-    for more info see <a target="_new" href={anecdote.info}>{anecdote.info}</a>
-    <br/><br/><br/>
-  </div>
-)
-
-
+import AnecdoteList from './components/AnecdoteList'
+import Anecdote from './components/Anecdote'
+import AnecdoteForm from './components/AnecdoteForm'
+import actionFor from './actionCreators'
+import PropTypes from 'prop-types'
 
 const About = () => (
   <div>
@@ -72,61 +35,6 @@ const Footer = () => (
   </div>
 )
 
-class CreateNew extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      content: '',
-      author: '',
-      info: '',
-      creationClicked:false,
-    }
-  }
-
-  handleChange = (e) => {
-    console.log(e.target.name, e.target.value)
-    this.setState({ [e.target.name]: e.target.value })
-  }
-
-  handleSubmit = (e) => {
-    e.preventDefault()
-    this.props.addNew({
-      content: this.state.content,
-      author: this.state.author,
-      info: this.state.info,
-      votes: 0
-    })
-
-    this.setState({
-      creationClicked: true
-    })
-  }
-
-  render() {
-    return(
-      <div>
-        <h2>create a new anecdote</h2>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            content
-            <input name='content' value={this.state.content} onChange={this.handleChange} />
-          </div>
-          <div>
-            author
-            <input name='author' value={this.state.author} onChange={this.handleChange} />
-          </div>
-          <div>
-            url for more info
-            <input name='info' value={this.state.info} onChange={this.handleChange} />
-          </div>
-          <button>create</button>
-        </form>
-        {this.state.creationClicked ? <Redirect to="/" />: <div/> }
-      </div>
-    )
-
-  }
-}
 
 const notificationStyle = {
   color: 'green',
@@ -189,7 +97,11 @@ class App extends React.Component {
   }
 
   anecdoteById = (id) => {
-    let res = this.state.anecdotes.find(a => a.id === id)
+    //let res = this.state.anecdotes.find(a => a.id === id)
+
+    let res = this.context.store.dispatch(
+      actionFor.getOneAnecdote( { 'id': id } )
+    )
 
     //let res = anecdoteService.get(id)
     //  .then(res => { return res } )
@@ -209,6 +121,21 @@ class App extends React.Component {
     this.setState({ anecdotes })
   }
 
+  componentDidMount() {
+    const { store } = this.context
+
+    console.log('App_componentDidMount-ny:', store)
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate()
+    )
+  }
+
+  componentWillUnmount() {
+    console.log('App_cwu!', this.context)
+    this.unsubscribe()
+  }
+
+
   render() {
     return (
       <div className="container">
@@ -216,8 +143,6 @@ class App extends React.Component {
           <Router>
             <div>
               <h1>Software anecdotes</h1>
-              {console.log('Tila paassa: ', this.state)}
-
               <div>
                 <NavLink exact style={baseLinkStyle} activeStyle={activeLinkStyle} to="/">anecdotes</NavLink> &nbsp;
                 <NavLink style={baseLinkStyle} activeStyle={activeLinkStyle} to="/create">create new</NavLink> &nbsp;
@@ -230,15 +155,15 @@ class App extends React.Component {
           </p>
               )}
 
+              {console.log('Mainis:', this.context.store.getState().anecdotes)}
+              <Route exact path="/" render={() => <AnecdoteList />} />
+              <Route exact path="/anecdotes" render={() => <AnecdoteList />} />
 
-              <Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
-              <Route exact path="/anecdotes" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
-
-              <Route exact path="/create" render={() => <CreateNew addNew={this.addNew}/>} />
+              <Route exact path="/create" render={() => <AnecdoteForm />} />
               <Route exact path="/about" render={() => <About />}/>
 
               <Route exact path="/anecdotes/:id" render={({ match }) =>
-                <Anecdote anecdote={this.anecdoteById(match.params.id)} />}
+                <Anecdote anecdotes={this.context.store.getState().anecdotes} id={match.params.id} />}
               />
 
               <Footer />
@@ -250,6 +175,15 @@ class App extends React.Component {
   }
 }
 
+App.contextTypes = {
+  store : PropTypes.object
+}
+
 export default App
 
 
+//<Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
+
+//<Route exact path="/anecdotes" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
+//<Route exact path="/create" render={() => <CreateNew addNew={this.addNew}/>} />
+//<Anecdote anecdotes={this.context.store.getState().anecdotes} anecdote={this.anecdoteById(match.params.id)} />}
