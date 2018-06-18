@@ -6,6 +6,8 @@ import { Provider } from 'react-redux'
 import App from './App'
 import anecdoteReducer from './reducers/anecdoteReducer'
 import notificationReducer from './reducers/notificationReducer'
+//import anecdoteService from './services/anecdotes'
+
 
 const reducer = combineReducers({
   anecdotes: anecdoteReducer,
@@ -14,7 +16,12 @@ const reducer = combineReducers({
 
 const store = createStore(reducer)
 
-//console.log('indx:', store.getState())
+/*anecdoteService.getAll().then(anes =>
+  anes.forEach(ane => {
+    store.dispatch({type:'NEW_ANE', data: ane })
+  }))*/
+
+
 
 ReactDOM.render(
   <Provider store={store}>

@@ -18,7 +18,7 @@ const initialState = [
 ]
 
 
-const anecdoteReducer = (state = initialState, action) => {
+const anecdoteReducer = (state = [], action) => {
   const inits = anecdoteService.getAll()
   console.log('aR-inits_opt2:', inits)
 
@@ -40,9 +40,16 @@ const anecdoteReducer = (state = initialState, action) => {
     return res
     //return state.map(an => an.id !== id ? an : res)
   case 'INIT':
-    return state
+    return action.data
   default:
     return state
+  }
+}
+
+export const anecdoteInitialization = (data) => {
+  return {
+    type: 'INIT',
+    data
   }
 }
 
