@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 //import actionFor from '../actionCreators'
 import { Redirect } from 'react-router-dom'
-import anecdoteService from '../services/anecdotes'
-import { anecdoteCreation } from './../reducers/anecdoteReducer'
+//import anecdoteService from '../services/anecdotes'
+import { createNew } from './../reducers/anecdoteReducer'
 import { connect } from 'react-redux'
 
 
@@ -65,8 +65,12 @@ class anecdoteForm extends React.Component {
     event.target.content.value = ''
 
 
-    const newAne = await anecdoteService.createNew(kama)
-    this.props.anecdoteCreation(newAne)
+    //const newAne = await anecdoteService.createNew(kama)
+    //this.props.anecdoteCreation(newAne)
+
+    console.log('uusi tyyppi:',kama)
+    this.props.createNew(kama)
+
 
     //let tobeAdded = actionFor.anecdoteCreation(kama)
     //console.log('AF_addAnecdote: ', kama, '-uusi-', tobeAdded)
@@ -117,6 +121,6 @@ anecdoteForm.contextTypes = {
 
 export default connect(
   null,
-  { anecdoteCreation }
+  { createNew }
 )( anecdoteForm )
 

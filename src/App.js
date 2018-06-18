@@ -7,7 +7,7 @@ import Anecdote from './components/Anecdote'
 import AnecdoteForm from './components/AnecdoteForm'
 import actionFor from './actionCreators'
 import PropTypes from 'prop-types'
-import { anecdoteInitialization } from './reducers/anecdoteReducer'
+import { initializeAnecdotes } from './reducers/anecdoteReducer'
 import { connect } from 'react-redux'
 
 
@@ -124,12 +124,16 @@ class App extends React.Component {
     this.setState({ anecdotes })
   }
 
-  componentDidMount = async () => {
+  componentDidMount () {
 
     //anecdoteService.getAll().then(anes =>
     //  store.dispatch(anecdoteInitialization(anes)))
-    const anes = await anecdoteService.getAll()
-    this.props.anecdoteInitialization(anes)
+
+    /*    const anes = await anecdoteService.getAll()
+     this.props.anecdoteInitialization(anes)
+   */
+
+    this.props.initializeAnecdotes()
 
     const { store } = this.context
 
@@ -191,7 +195,7 @@ App.contextTypes = {
 
 export default connect(
   null,
-  { anecdoteInitialization }
+  { initializeAnecdotes }
 ) (App)
 
 //export default App

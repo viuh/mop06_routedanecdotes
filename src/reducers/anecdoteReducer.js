@@ -61,5 +61,26 @@ export const anecdoteCreation = (data) => {
 }
 
 
+export const initializeAnecdotes = () => {
+  return async (dispatch) => {
+    const anes = await anecdoteService.getAll()
+    dispatch({
+      type: 'INIT',
+      data: anes
+    })
+  }
+}
+
+
+export const createNew = (content) => {
+  return async (dispatch) => {
+    const newAne = await anecdoteService.createNew(content)
+    dispatch({
+      type: 'NEW_ANE',
+      data: newAne
+    })
+  }
+}
+
 export default anecdoteReducer
 
