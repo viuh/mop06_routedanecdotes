@@ -1,6 +1,6 @@
 import anecdoteService from '../services/anecdotes'
 
-const initialState = [
+/*const initialState = [
   {
     content: 'If it hurts, do it more often',
     author: 'Jez Humble',
@@ -15,7 +15,7 @@ const initialState = [
     votes: 2,
     id: '2'
   }
-]
+]*/
 
 
 const anecdoteReducer = (state = [], action) => {
@@ -53,7 +53,12 @@ export const anecdoteInitialization = (data) => {
   }
 }
 
-
+export const anecdoteCreation = (data) => {
+  return {
+    type: 'NEW_ANE',
+    data
+  }
+}
 
 
 export default anecdoteReducer

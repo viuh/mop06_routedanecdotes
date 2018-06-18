@@ -1,7 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import actionFor from '../actionCreators'
+//import actionFor from '../actionCreators'
 import { Redirect } from 'react-router-dom'
+import anecdoteService from '../services/anecdotes'
+import { anecdoteCreation } from './../reducers/anecdoteReducer'
+import { connect } from 'react-redux'
+
 
 class anecdoteForm extends React.Component {
 
@@ -49,7 +53,7 @@ class anecdoteForm extends React.Component {
   }
 
 
-  addAnecdote = (event) => {
+  addAnecdote = async (event) => {
     event.preventDefault()
 
     const kama = {
@@ -58,13 +62,18 @@ class anecdoteForm extends React.Component {
       info: this.state.info,
       votes: 0
     }
-    let tobeAdded = actionFor.anecdoteCreation(kama)
-    console.log('AF_addAnecdote: ', kama, '-uusi-', tobeAdded)
-    this.context.store.dispatch(tobeAdded)
+    event.target.content.value = ''
+
+
+    const newAne = await anecdoteService.createNew(kama)
+    this.props.anecdoteCreation(newAne)
+
+    //let tobeAdded = actionFor.anecdoteCreation(kama)
+    //console.log('AF_addAnecdote: ', kama, '-uusi-', tobeAdded)
+    //this.context.store.dispatch(tobeAdded)
 
     //this.context.store.getState().concat(tobeAdded) //?
 
-    event.target.content.value = ''
 
     this.setState({
       creationClicked: true
@@ -104,4 +113,10 @@ anecdoteForm.contextTypes = {
   store: PropTypes.object
 }
 
-export default anecdoteForm
+//export default anecdoteForm
+
+export default connect(
+  null,
+  { anecdoteCreation }
+)( anecdoteForm )
+
