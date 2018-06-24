@@ -70,7 +70,7 @@ class App extends React.Component {
     }
   }
 
-  addNew = (anecdote) => {
+  addNewXXXX = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     let msg = 'a new anecdote: ' + anecdote.content + ' created!'
     anecdoteService.createNew(anecdote)
@@ -112,27 +112,24 @@ class App extends React.Component {
   componentDidMount () {
 
     this.props.initializeAnecdotes()
-
     const { store } = this.context
 
-    console.log('App_componentDidMount-ny:', store)
     this.unsubscribe = store.subscribe(() =>
       this.forceUpdate()
     )
   }
 
   componentWillUnmount() {
-    console.log('App_cwu!', this.context)
     this.unsubscribe()
   }
 
   componentWillMount() {
-    console.log('comWillMount')
+    //console.log('comWillMount')
     anecdoteService.getAll().then(res => {
       this.setState({ items: res.data })
-      console.log('cwm_internal', res.data)
+      //console.log('cwm_internal', res.data)
     })
-    console.log('cwm: ',this.state.items)
+    //console.log('cwm: ',this.state.items)
   }
 
 
@@ -156,6 +153,8 @@ class App extends React.Component {
               )}
 
               {console.log('Mainis:', this.context.store.getState().anecdotes)}
+              {console.log('Full store:', this.context.store.getState())}
+              {console.log('OOPS:', this.state)}
               <Route exact path="/" render={() => <AnecdoteList />} />
               <Route exact path="/anecdotes" render={() => <AnecdoteList />} />
 

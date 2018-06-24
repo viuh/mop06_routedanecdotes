@@ -28,18 +28,18 @@ class Anecdote extends React.Component {
     this.unsubscribe()
   }
 
-  shouldComponentUpdate() {
-    console.log('Anecdote_shouldCompUpd?')
+/*  shouldComponentUpdate() {
+    //console.log('Anecdote_shouldCompUpd?')
     return this.state.notYet
-  }
+  }*/
 
   componentWillUpdate () {
-    console.log('cwillupdate ??? ')
+    //console.log('cwillupdate ??? ')
 
     if (typeof (this.state.items)==='undefined') {
       anecdoteService.getAll().then(res => {
         this.setState({ items: res.data , notYet: false })
-        console.log('cwm_internal', res.data)
+        //console.log('cwm_internal', res.data)
       })
     }
   }
@@ -48,12 +48,9 @@ class Anecdote extends React.Component {
     const { id , anec } = this.props
     //const anecdote = anecdotes.filter( { 'id': id }  )
 
-    console.log('Anecdote_renderA:', this.props)
-    console.log('Anecdote_renderB:', anec)
     let allanecs = this.props.anecdotes || []
 
     let anecdote = allanecs.find( a => a.id === id)
-    console.log('Anecdote_renderC:', anecdote)
 
     if (typeof (anecdote) === 'undefined' || anecdote === null) {
       anecdote = { content : 'loading',
@@ -61,7 +58,6 @@ class Anecdote extends React.Component {
         info:''
       }
       console.log('Initialization of anecdote?')
-      //this.setState({ notYet: true })
     } else {
       //this.setState({ notYet: false })
     }

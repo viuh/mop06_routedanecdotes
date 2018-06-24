@@ -22,7 +22,7 @@ class anecdoteForm extends React.Component {
   componentDidMount() {
     const { store } = this.context
 
-    console.log('AF_componentDidMount', store)
+    //console.log('AF_componentDidMount', store)
 
     this.unsubscribe = store.subscribe(() =>
       this.forceUpdate()
@@ -34,7 +34,7 @@ class anecdoteForm extends React.Component {
   }
 
   handleChange = (e) => {
-    console.log(e.target.name, e.target.value)
+    //console.log(e.target.name, e.target.value)
     this.setState({ [e.target.name]: e.target.value })
   }
 
@@ -68,16 +68,18 @@ class anecdoteForm extends React.Component {
     //const newAne = await anecdoteService.createNew(kama)
     //this.props.anecdoteCreation(newAne)
 
-    console.log('uusi tyyppi:',kama)
     this.props.createNew(kama)
 
 
     //let tobeAdded = actionFor.anecdoteCreation(kama)
     //console.log('AF_addAnecdote: ', kama, '-uusi-', tobeAdded)
     //this.context.store.dispatch(tobeAdded)
+    let msg = 'a new anecdote: ' + this.state.content + ' created!'
+    //this.context.store.notification = msg
+    this.setState({ notification : msg })
 
     //this.context.store.getState().concat(tobeAdded) //?
-
+    console.log('Addnew: ', this.context.store.getState())
 
     this.setState({
       creationClicked: true
@@ -117,7 +119,6 @@ anecdoteForm.contextTypes = {
   store: PropTypes.object
 }
 
-//export default anecdoteForm
 
 export default connect(
   null,

@@ -5,26 +5,22 @@ const url = 'http://localhost:3001/anecdotes'
 
 const getAll = async () => {
   const response = await axios.get(url)
-  console.log('getAll', response.data)
+  //console.log('getAll', response.data)
   return Promise.all(response.data)
 }
 
 const createNew = async (content) => {
-  console.log('UUsi nw', content , '<')
+  //console.log('UUsi nw', content , '<')
   const response = await axios.post(url,  content )
   return response.data
 }
 
 const get = async (id) => {
-  console.log('Ge from Service',id)
+  //console.log('Ge from Service',id)
   try {
-    //const allitems = await getAll()
-    //const res = allitems.findById(id)
-    //let res = allitems.find(a => a.id === id)
-    //console.log('res:?', res)
     const res = await axios.get(`${url}/${id}`)
 
-    console.log('Vastays ny:',res.data)
+    //console.log('Vastays ny:',res.data)
     return Promise.all(res.data)
   } catch (exception) {
     console.log(exception)
