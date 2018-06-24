@@ -1,7 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom'
-import { Media } from 'react-bootstrap'
-import anecdoteService from './services/anecdotes'
+import { Media, Alert } from 'react-bootstrap'
 import AnecdoteList from './components/AnecdoteList'
 import Anecdote from './components/Anecdote'
 import AnecdoteForm from './components/AnecdoteForm'
@@ -9,6 +8,7 @@ import actionFor from './actionCreators'
 import PropTypes from 'prop-types'
 import { initializeAnecdotes } from './reducers/anecdoteReducer'
 import { connect } from 'react-redux'
+import { hideMessage } from './reducers/notificationReducer'
 
 
 const About = () => (
@@ -38,16 +38,6 @@ const Footer = () => (
   </div>
 )
 
-
-const notificationStyle = {
-  color: 'green',
-  fontStyle : 'italic',
-  fontSize: 14,
-  borderStyle: 'dotted',
-  borderRadius: 5,
-  padding: 10
-}
-
 const activeLinkStyle={
   fontWeight: 'bold',
   color: 'blue',
@@ -59,8 +49,9 @@ const baseLinkStyle={
   fontSize: 14
 }
 
-
 class App extends React.Component {
+
+
   constructor() {
     super()
 
@@ -69,54 +60,13 @@ class App extends React.Component {
     }
   }
 
-  postAdd = ( msg ) => {
-
-    if (msg !== '') {
-      this.setState({ notification: msg })
-    }
-    setTimeout(() => {
-      this.setState({ notification: null })
-    }, 10000)
-
-  }
-
-  addNewXXXX = (anecdote) => {
-    anecdote.id = (Math.random() * 10000).toFixed(0)
-    let msg = 'a new anecdote: ' + anecdote.content + ' created!'
-    anecdoteService.createNew(anecdote)
-    const anecdotes2= this.state.anecdotes.concat(anecdote)
-    this.setState({ anecdotes: anecdotes2 ,
-      notification: msg
-    })
-    setTimeout(() => {
-      this.setState({ notification: null })
-    }, 10000)
-
-  }
-
   anecdoteById = (id) => {
-    //let res = this.state.anecdotes.find(a => a.id === id)
 
     let res = this.context.store.dispatch(
       actionFor.getOneAnecdote( { 'id': id } )
     )
 
-    //let res = anecdoteService.get(id)
-    //  .then(res => { return res } )
-    return res   //returning as array otherwise AL croaks.
-  }
-
-  vote = (id) => {
-    const anecdote = this.anecdoteById(id)
-
-    const voted = {
-      ...anecdote,
-      votes: anecdote.votes + 1
-    }
-
-    const anecdotes = this.state.anecdotes.map(a => a.id === id ? voted : a)
-
-    this.setState({ anecdotes })
+    return res
   }
 
   componentDidMount () {
@@ -129,25 +79,21 @@ class App extends React.Component {
     )
   }
 
+  componentWillUpdate () {
+    //console.log('CompWillUpdate')
+
+    if (this.context.store.getState().notification !== '') {
+      setTimeout(() => {
+        this.props.hideMessage()
+      }, 5000)
+    }
+
+  }
+
   componentWillUnmount() {
     this.unsubscribe()
   }
 
-  componentWillMount() {
-    //console.log('comWillMount')
-    anecdoteService.getAll().then(res => {
-      this.setState({ items: res.data })
-      //console.log('cwm_internal', res.data)
-    })
-    //console.log('cwm: ',this.state.items)
-  }
-
-  /*{(this.context.store.getState().notification &&
-          <p style={notificationStyle}>
-            {this.context.store.getState().notification}
-          </p>
-              )}
-*/
 
   render() {
     return (
@@ -162,13 +108,11 @@ class App extends React.Component {
                 <NavLink style={baseLinkStyle} activeStyle={activeLinkStyle} to="/about">about</NavLink>
               </div>
 
-              {(this.context.store.getState().notification &&
-              <p style={notificationStyle}> {this.context.store.getState().notification} </p>
+              { (this.context.store.getState().notification &&
+              <Alert color="success">{this.context.store.getState().notification}
+              </Alert>
               )}
 
-              {console.log('Mainis:', this.context.store.getState().anecdotes)}
-              {console.log('Full store:', this.context.store.getState())}
-              {console.log('OOPS:', this.context.store.getState().notification)}
               <Route exact path="/" render={() => <AnecdoteList />} />
               <Route exact path="/anecdotes" render={() => <AnecdoteList />} />
 
@@ -199,8 +143,9 @@ const mapStateToProps = (state) => {
   }
 }
 
+//this gives the this.props. -accss to to dispatch
 export default connect(
   mapStateToProps,
-  { initializeAnecdotes }
+  { initializeAnecdotes, hideMessage }
 ) (App)
 

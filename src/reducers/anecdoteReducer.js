@@ -9,8 +9,6 @@ const anecdoteReducer = (state = [], action) => {
 
   switch(action.type) {
   case 'NEW_ANE':
-    console.log('New ane: ', state )
-    //addMessageAction ( msg )
     return [...state, action.data ]
   case 'GET':  // TODO: turha?
     //id = action.data
@@ -59,7 +57,7 @@ export const createNew = (content) => {
     //addMessage( 'luotu' )
     let msg = 'a new anecdote: ' + newAne.content + ' created!'
 
-    console.log('newnewenw', newAne.content)
+    //console.log('newnewenw', newAne.content)
     addMessage( msg )
     //notificationReducer.dispatch('SHOW')
   }

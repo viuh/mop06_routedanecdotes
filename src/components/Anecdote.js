@@ -53,17 +53,13 @@ class Anecdote extends React.Component {
         votes : 0,
         info:''
       }
-      console.log('Initialization of anecdote?')
+      //console.log('Initialization of anecdote?')
     } else {
       //this.setState({ notYet: false })
     }
     return (
       <div>
-        {console.log('DDUI', anecdote,'tila: ', this.context.store.getState())}
-        {/*this.context.store.dispatch(
-          actionFor.getOneAnecdote(1)
-        )*/}
-        {/*this.context.store.getState().anecdotes.find*/}
+        {/*console.log('DDUI', anecdote,'tila: ', this.context.store.getState())*/}
         <h2>{anecdote.content}</h2>
         <br/>
     has {anecdote.votes} votes<br/><br/>
