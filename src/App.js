@@ -65,22 +65,7 @@ class App extends React.Component {
     super()
 
     this.state = {
-      anecdotes: [
-        {
-          content: 'If it hurts, do it more often',
-          author: 'Jez Humble',
-          info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
-          votes: 0,
-          id: '1'
-        },
-        {
-          content: 'Premature optimization is the root of all evil',
-          author: 'Donald Knuth',
-          info: 'http://wiki.c2.com/?PrematureOptimization',
-          votes: 0,
-          id: '2'
-        }
-      ],
+      anecdotes: [],
       notification: ''
     }
   }
@@ -126,13 +111,6 @@ class App extends React.Component {
 
   componentDidMount () {
 
-    //anecdoteService.getAll().then(anes =>
-    //  store.dispatch(anecdoteInitialization(anes)))
-
-    /*    const anes = await anecdoteService.getAll()
-     this.props.anecdoteInitialization(anes)
-   */
-
     this.props.initializeAnecdotes()
 
     const { store } = this.context
@@ -146,6 +124,15 @@ class App extends React.Component {
   componentWillUnmount() {
     console.log('App_cwu!', this.context)
     this.unsubscribe()
+  }
+
+  componentWillMount() {
+    console.log('comWillMount')
+    anecdoteService.getAll().then(res => {
+      this.setState({ items: res.data })
+      console.log('cwm_internal', res.data)
+    })
+    console.log('cwm: ',this.state.items)
   }
 
 
@@ -198,11 +185,3 @@ export default connect(
   { initializeAnecdotes }
 ) (App)
 
-//export default App
-
-
-//<Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
-
-//<Route exact path="/anecdotes" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
-//<Route exact path="/create" render={() => <CreateNew addNew={this.addNew}/>} />
-//<Anecdote anecdotes={this.context.store.getState().anecdotes} anecdote={this.anecdoteById(match.params.id)} />}

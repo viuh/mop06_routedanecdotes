@@ -5,7 +5,8 @@ const url = 'http://localhost:3001/anecdotes'
 
 const getAll = async () => {
   const response = await axios.get(url)
-  return response.data
+  console.log('getAll', response.data)
+  return Promise.all(response.data)
 }
 
 const createNew = async (content) => {
@@ -24,7 +25,7 @@ const get = async (id) => {
     const res = await axios.get(`${url}/${id}`)
 
     console.log('Vastays ny:',res.data)
-    return res.data
+    return Promise.all(res.data)
   } catch (exception) {
     console.log(exception)
     return 'something went wrong'

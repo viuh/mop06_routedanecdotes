@@ -1,8 +1,18 @@
 import React from 'react'
 //import actionFor from '../actionCreators'
 import PropTypes from 'prop-types'
+import anecdoteService from '../services/anecdotes'
 
 class Anecdote extends React.Component {
+
+  constructor() {
+    super()
+
+    this.state = {
+      notYet:true,
+      items: []
+    }
+  }
 
   componentDidMount() {
     const { store } = this.context
@@ -20,14 +30,41 @@ class Anecdote extends React.Component {
 
   shouldComponentUpdate() {
     console.log('Anecdote_shouldCompUpd?')
+    return this.state.notYet
+  }
+
+  componentWillUpdate () {
+    console.log('cwillupdate ??? ')
+
+    if (typeof (this.state.items)==='undefined') {
+      anecdoteService.getAll().then(res => {
+        this.setState({ items: res.data , notYet: false })
+        console.log('cwm_internal', res.data)
+      })
+    }
   }
 
   render () {
-    const { id } = this.props
+    const { id , anec } = this.props
     //const anecdote = anecdotes.filter( { 'id': id }  )
-    let anecdote = this.props.anecdotes.find( a => a.id === id)
-    console.log('Anecdote_render:', this.props, '--', anecdote)
 
+    console.log('Anecdote_renderA:', this.props)
+    console.log('Anecdote_renderB:', anec)
+    let allanecs = this.props.anecdotes || []
+
+    let anecdote = allanecs.find( a => a.id === id)
+    console.log('Anecdote_renderC:', anecdote)
+
+    if (typeof (anecdote) === 'undefined' || anecdote === null) {
+      anecdote = { content : 'loading',
+        votes : 0,
+        info:''
+      }
+      console.log('Initialization of anecdote?')
+      //this.setState({ notYet: true })
+    } else {
+      //this.setState({ notYet: false })
+    }
     return (
       <div>
         {console.log('DDUI', anecdote,'tila: ', this.context.store.getState())}
