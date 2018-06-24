@@ -65,9 +65,19 @@ class App extends React.Component {
     super()
 
     this.state = {
-      anecdotes: [],
-      notification: ''
+      notification: 'It begins.1..'
     }
+  }
+
+  postAdd = ( msg ) => {
+
+    if (msg !== '') {
+      this.setState({ notification: msg })
+    }
+    setTimeout(() => {
+      this.setState({ notification: null })
+    }, 10000)
+
   }
 
   addNewXXXX = (anecdote) => {
@@ -132,6 +142,12 @@ class App extends React.Component {
     //console.log('cwm: ',this.state.items)
   }
 
+  /*{(this.context.store.getState().notification &&
+          <p style={notificationStyle}>
+            {this.context.store.getState().notification}
+          </p>
+              )}
+*/
 
   render() {
     return (
@@ -146,15 +162,13 @@ class App extends React.Component {
                 <NavLink style={baseLinkStyle} activeStyle={activeLinkStyle} to="/about">about</NavLink>
               </div>
 
-              {(this.state.notification &&
-          <p style={notificationStyle}>
-            {this.state.notification}
-          </p>
+              {(this.context.store.getState().notification &&
+              <p style={notificationStyle}> {this.context.store.getState().notification} </p>
               )}
 
               {console.log('Mainis:', this.context.store.getState().anecdotes)}
               {console.log('Full store:', this.context.store.getState())}
-              {console.log('OOPS:', this.state)}
+              {console.log('OOPS:', this.context.store.getState().notification)}
               <Route exact path="/" render={() => <AnecdoteList />} />
               <Route exact path="/anecdotes" render={() => <AnecdoteList />} />
 
@@ -178,9 +192,15 @@ App.contextTypes = {
   store : PropTypes.object
 }
 
+const mapStateToProps = (state) => {
+  return {
+    anecdotes: state.anecdotes,
+    notification: state.notitification
+  }
+}
 
 export default connect(
-  null,
+  mapStateToProps,
   { initializeAnecdotes }
 ) (App)
 

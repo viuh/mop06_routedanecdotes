@@ -28,10 +28,6 @@ class Anecdote extends React.Component {
     this.unsubscribe()
   }
 
-/*  shouldComponentUpdate() {
-    //console.log('Anecdote_shouldCompUpd?')
-    return this.state.notYet
-  }*/
 
   componentWillUpdate () {
     //console.log('cwillupdate ??? ')
@@ -45,7 +41,7 @@ class Anecdote extends React.Component {
   }
 
   render () {
-    const { id , anec } = this.props
+    const { id } = this.props
     //const anecdote = anecdotes.filter( { 'id': id }  )
 
     let allanecs = this.props.anecdotes || []

@@ -2,16 +2,18 @@ import anecdoteService from '../services/anecdotes'
 import { addMessage } from './notificationReducer'
 
 const anecdoteReducer = (state = [], action) => {
-  const inits = anecdoteService.getAll()
+  //const inits = anecdoteService.getAll()
 
-  let id = null
+  //let id = null
   let res = null
 
   switch(action.type) {
   case 'NEW_ANE':
-    return [...state, action.data]
+    console.log('New ane: ', state )
+    //addMessageAction ( msg )
+    return [...state, action.data ]
   case 'GET':  // TODO: turha?
-    id = action.data
+    //id = action.data
     res = state[0]
     return res
   case 'INIT':
@@ -54,8 +56,11 @@ export const createNew = (content) => {
       type: 'NEW_ANE',
       data: newAne
     })
-    addMessage( 'luotu' )
+    //addMessage( 'luotu' )
+    let msg = 'a new anecdote: ' + newAne.content + ' created!'
 
+    console.log('newnewenw', newAne.content)
+    addMessage( msg )
     //notificationReducer.dispatch('SHOW')
   }
 }

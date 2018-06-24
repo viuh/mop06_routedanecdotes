@@ -35,6 +35,7 @@ class AnecdoteList extends React.Component {
 
 }
 
+
 AnecdoteList.contextTypes = {
   store : PropTypes.object
 }

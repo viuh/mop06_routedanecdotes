@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom'
 //import anecdoteService from '../services/anecdotes'
 import { createNew } from './../reducers/anecdoteReducer'
 import { connect } from 'react-redux'
+//import { addMessage } from '../reducers/notificationReducer'
 
 
 class anecdoteForm extends React.Component {
@@ -64,20 +65,13 @@ class anecdoteForm extends React.Component {
     }
     event.target.content.value = ''
 
-
-    //const newAne = await anecdoteService.createNew(kama)
-    //this.props.anecdoteCreation(newAne)
-
     this.props.createNew(kama)
 
-
-    //let tobeAdded = actionFor.anecdoteCreation(kama)
-    //console.log('AF_addAnecdote: ', kama, '-uusi-', tobeAdded)
-    //this.context.store.dispatch(tobeAdded)
     let msg = 'a new anecdote: ' + this.state.content + ' created!'
     //this.context.store.notification = msg
     this.setState({ notification : msg })
-
+    console.log('this.stoe? ', this.context.store.getState())
+    //this.props.addMessage( msg )
     //this.context.store.getState().concat(tobeAdded) //?
     console.log('Addnew: ', this.context.store.getState())
 
@@ -119,9 +113,15 @@ anecdoteForm.contextTypes = {
   store: PropTypes.object
 }
 
+const mapStateToProps = (state) => {
+  return {
+    anecdotes: state.anecdotes,
+    notification: state.notitification
+  }
+}
 
 export default connect(
-  null,
+  mapStateToProps,
   { createNew }
 )( anecdoteForm )
 
